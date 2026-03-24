@@ -40,7 +40,7 @@ public class MarketDataETLService {
             try {
                 log.info("Extrayendo datos históricos para: {}", symbol);
                 String jsonResponse = marketDataClient.fetchHistoricalData(symbol);
-
+                log.info("Respuesta cruda de la API para {}: {}", symbol, jsonResponse);
                 List<FinancialAsset> assets = parseJsonResponse(jsonResponse, symbol);
 
                 // Carga masiva a la base de datos
@@ -61,33 +61,51 @@ public class MarketDataETLService {
      * Nota: Esta estructura asume el formato típico de Alpha Vantage (Time Series (Daily)).
      * Deberás ajustar las claves ("Time Series (Daily)", "1. open", etc.) según la API exacta que elijas.
      */
+
     private List<FinancialAsset> parseJsonResponse(String jsonResponse, String symbol) throws Exception {
         List<FinancialAsset> assetList = new ArrayList<>();
         JsonNode rootNode = objectMapper.readTree(jsonResponse);
 
-        // Navegamos al nodo que contiene las series de tiempo
-        JsonNode timeSeriesNode = rootNode.get("Time Series (Daily)");
-
-        if (timeSeriesNode == null) {
-            throw new RuntimeException("El JSON no contiene el nodo de series de tiempo. Revisa el límite de la API.");
+        JsonNode resultNode = rootNode.path("chart").path("result").get(0);
+        if (resultNode == null || resultNode.isMissingNode()) {
+            throw new RuntimeException("Estructura JSON inválida desde Yahoo Finance para " + symbol);
         }
 
-        Iterator<Map.Entry<String, JsonNode>> fields = timeSeriesNode.fields();
+        // Navegamos a los arrays paralelos de Yahoo Finance
+        JsonNode timestamps = resultNode.path("timestamp");
+        JsonNode quote = resultNode.path("indicators").path("quote").get(0);
 
-        while (fields.hasNext()) {
-            Map.Entry<String, JsonNode> field = fields.next();
-            String dateString = field.getKey();
-            JsonNode dailyData = field.getValue();
+        JsonNode opens = quote.path("open");
+        JsonNode closes = quote.path("close");
+        JsonNode highs = quote.path("high");
+        JsonNode lows = quote.path("low");
+        JsonNode volumes = quote.path("volume");
 
-            // Usamos el patrón Builder de Lombok que definimos en la entidad
+        if (timestamps == null || timestamps.isMissingNode()) {
+            return assetList; // Retorna vacío si no hay datos
+        }
+
+        // Iteramos sobre el array de tiempos
+        for (int i = 0; i < timestamps.size(); i++) {
+            // A veces Yahoo tiene días festivos donde los precios son "null", los omitimos
+            if (opens.get(i).isNull() || closes.get(i).isNull()) {
+                continue;
+            }
+
+            // Convertir el tiempo UNIX (segundos) a LocalDate
+            long unixTime = timestamps.get(i).asLong();
+            LocalDate date = java.time.Instant.ofEpochSecond(unixTime)
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .toLocalDate();
+
             FinancialAsset asset = FinancialAsset.builder()
                     .symbol(symbol)
-                    .date(LocalDate.parse(dateString))
-                    .open(dailyData.get("1. open").asDouble())
-                    .high(dailyData.get("2. high").asDouble())
-                    .low(dailyData.get("3. low").asDouble())
-                    .close(dailyData.get("4. close").asDouble())
-                    .volume(dailyData.get("5. volume").asLong())
+                    .date(date)
+                    .open(opens.get(i).asDouble())
+                    .high(highs.get(i).asDouble())
+                    .low(lows.get(i).asDouble())
+                    .close(closes.get(i).asDouble())
+                    .volume(volumes.get(i).asLong())
                     .build();
 
             assetList.add(asset);
