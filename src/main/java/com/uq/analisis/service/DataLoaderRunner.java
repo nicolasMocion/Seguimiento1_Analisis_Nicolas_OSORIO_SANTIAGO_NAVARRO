@@ -26,7 +26,7 @@ public class DataLoaderRunner implements CommandLineRunner {
                 "DIA",   // Dow Jones ETF
                 "IBB",   // Biotech ETF
                 "GLD"    // Gold Trust
-                // Añade hasta llegar a los 20 requeridos. Para BVC podrías necesitar sufijos, ej: "ECOPETROL.CN"
+
         );
 
         etlService.syncMarketData(targetSymbols);
