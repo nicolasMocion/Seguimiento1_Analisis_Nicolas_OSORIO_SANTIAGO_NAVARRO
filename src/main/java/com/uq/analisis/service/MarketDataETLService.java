@@ -63,7 +63,9 @@ public class MarketDataETLService {
      */
 
     private List<FinancialAsset> parseJsonResponse(String jsonResponse, String symbol) throws Exception {
-        List<FinancialAsset> assetList = new ArrayList<>();
+        // Usamos un Map (Fecha -> Activo) para evitar fechas duplicadas en la respuesta de Yahoo
+        Map<LocalDate, FinancialAsset> uniqueAssetsMap = new java.util.HashMap<>();
+
         JsonNode rootNode = objectMapper.readTree(jsonResponse);
 
         JsonNode resultNode = rootNode.path("chart").path("result").get(0);
@@ -71,7 +73,6 @@ public class MarketDataETLService {
             throw new RuntimeException("Estructura JSON inválida desde Yahoo Finance para " + symbol);
         }
 
-        // Navegamos a los arrays paralelos de Yahoo Finance
         JsonNode timestamps = resultNode.path("timestamp");
         JsonNode quote = resultNode.path("indicators").path("quote").get(0);
 
@@ -82,17 +83,14 @@ public class MarketDataETLService {
         JsonNode volumes = quote.path("volume");
 
         if (timestamps == null || timestamps.isMissingNode()) {
-            return assetList; // Retorna vacío si no hay datos
+            return new ArrayList<>(); // Retorna lista vacía si no hay datos
         }
 
-        // Iteramos sobre el array de tiempos
         for (int i = 0; i < timestamps.size(); i++) {
-            // A veces Yahoo tiene días festivos donde los precios son "null", los omitimos
             if (opens.get(i).isNull() || closes.get(i).isNull()) {
                 continue;
             }
 
-            // Convertir el tiempo UNIX (segundos) a LocalDate
             long unixTime = timestamps.get(i).asLong();
             LocalDate date = java.time.Instant.ofEpochSecond(unixTime)
                     .atZone(java.time.ZoneId.systemDefault())
@@ -108,9 +106,12 @@ public class MarketDataETLService {
                     .volume(volumes.get(i).asLong())
                     .build();
 
-            assetList.add(asset);
+            // Si Yahoo envía dos registros para el mismo día, esto sobrescribe el viejo con el nuevo,
+            // garantizando que a la base de datos solo llegue una copia por fecha.
+            uniqueAssetsMap.put(date, asset);
         }
 
-        return assetList;
+        // Convertimos el Map de vuelta a una Lista
+        return new ArrayList<>(uniqueAssetsMap.values());
     }
 }
