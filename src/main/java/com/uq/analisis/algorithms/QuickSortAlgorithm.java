@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class QuickSortAlgorithm implements SortingAlgorithm{
 
 
@@ -65,3 +66,5 @@ public class QuickSortAlgorithm implements SortingAlgorithm{
         data.set(j, temp);
     }
 }
+
+

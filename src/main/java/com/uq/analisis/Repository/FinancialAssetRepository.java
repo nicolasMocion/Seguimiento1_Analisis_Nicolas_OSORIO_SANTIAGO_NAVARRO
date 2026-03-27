@@ -2,6 +2,7 @@ package com.uq.analisis.Repository;
 
 import com.uq.analisis.model.FinancialAsset;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -18,4 +19,7 @@ public interface FinancialAssetRepository extends JpaRepository<FinancialAsset, 
 
     // Método para recuperar los datos en un rango de fechas (útil para alinear calendarios)
     List<FinancialAsset> findBySymbolAndDateBetweenOrderByDateAsc(String symbol, LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT DISTINCT f.symbol FROM FinancialAsset f")
+    List<String> findAllDistinctSymbols();
 }

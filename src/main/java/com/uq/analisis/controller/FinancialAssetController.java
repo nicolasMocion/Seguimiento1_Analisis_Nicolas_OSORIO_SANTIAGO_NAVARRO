@@ -4,6 +4,8 @@ import com.uq.analisis.model.FinancialAsset;
 import com.uq.analisis.Repository.FinancialAssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.uq.analisis.dto.BenchmarkResult;
+import com.uq.analisis.service.AlgorithmBenchmarkService;
 
 import java.util.List;
 
@@ -14,10 +16,27 @@ import java.util.List;
 public class FinancialAssetController {
 
     private final FinancialAssetRepository repository;
+    private final AlgorithmBenchmarkService benchmarkService;
+
+    @GetMapping("/symbols")
+    public List<String> getAllSymbols() {
+        return repository.findAllDistinctSymbols();
+    }
 
     @GetMapping("/{symbol}")
     public List<FinancialAsset> getAssetsBySymbol(@PathVariable String symbol) {
         // Usamos el método que creaste en el repositorio para traer los datos ordenados por fecha
         return repository.findAllBySymbolOrderByDateAsc(symbol);
     }
+
+
+    @GetMapping("/{symbol}/benchmark")
+    public List<BenchmarkResult> getBenchmarkResults(@PathVariable String symbol) {
+        return benchmarkService.runBenchmark(symbol);
+    }
+
+
+
 }
+
+

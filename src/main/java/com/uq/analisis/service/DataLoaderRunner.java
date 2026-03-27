@@ -21,7 +21,9 @@ public class DataLoaderRunner implements CommandLineRunner {
 
         // Mezcla de ETFs globales y posibles tickers locales (ajusta los tickers de la BVC según tu API)
         List<String> targetSymbols = Arrays.asList(
-                "IBM"   // S&P 500 ETF
+                "IBM", // Acción IBM
+                "NTDOY" //Nintendo
+
 
         );
 
