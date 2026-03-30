@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.uq.analisis.dto.BenchmarkResult;
 import com.uq.analisis.service.AlgorithmBenchmarkService;
+import com.uq.analisis.service.TopVolumeService;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class FinancialAssetController {
 
     private final FinancialAssetRepository repository;
     private final AlgorithmBenchmarkService benchmarkService;
+    private final TopVolumeService topVolumeService;
 
     @GetMapping("/symbols")
     public List<String> getAllSymbols() {
@@ -33,6 +35,11 @@ public class FinancialAssetController {
     @GetMapping("/{symbol}/benchmark")
     public List<BenchmarkResult> getBenchmarkResults(@PathVariable String symbol) {
         return benchmarkService.runBenchmark(symbol);
+    }
+
+    @GetMapping("/{symbol}/top-volume")
+    public List<FinancialAsset> getTop15Volume(@PathVariable String symbol) {
+        return topVolumeService.getTop15Volume(symbol);
     }
 
 

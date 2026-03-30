@@ -17,7 +17,7 @@ import java.util.List;
 public class AlgorithmBenchmarkService {
 
     private final FinancialAssetRepository repository;
-    // ¡Spring Boot inyectará automáticamente QuickSort y cualquier otro algoritmo que crees!
+    // Spring Boot inyectará automáticamente los algoritmos
     private final List<SortingAlgorithm> algorithms;
 
     public List<BenchmarkResult> runBenchmark(String symbol) {

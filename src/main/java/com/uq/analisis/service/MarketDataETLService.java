@@ -38,9 +38,8 @@ public class MarketDataETLService {
             }
 
             try {
-                log.info("Extrayendo datos históricos para: {}", symbol);
+                log.info("Extrayendo datos para: {}", symbol);
                 String jsonResponse = marketDataClient.fetchHistoricalData(symbol);
-                log.info("Respuesta cruda de la API para {}: {}", symbol, jsonResponse);
                 List<FinancialAsset> assets = parseJsonResponse(jsonResponse, symbol);
 
                 // Carga masiva a la base de datos
@@ -56,14 +55,8 @@ public class MarketDataETLService {
         }
     }
 
-    /**
-     * Parseo manual del JSON.
-     * Nota: Esta estructura asume el formato típico de Alpha Vantage (Time Series (Daily)).
-     * Deberás ajustar las claves ("Time Series (Daily)", "1. open", etc.) según la API exacta que elijas.
-     */
-
     private List<FinancialAsset> parseJsonResponse(String jsonResponse, String symbol) throws Exception {
-        // Usamos un Map (Fecha -> Activo) para evitar fechas duplicadas en la respuesta de Yahoo
+        // Usamos un Map (Fecha -> Activo) para evitar fechas duplicadas en la respuesta
         Map<LocalDate, FinancialAsset> uniqueAssetsMap = new java.util.HashMap<>();
 
         JsonNode rootNode = objectMapper.readTree(jsonResponse);

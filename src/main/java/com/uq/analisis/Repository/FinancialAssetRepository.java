@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface FinancialAssetRepository extends JpaRepository<FinancialAsset, Long> {
 
-    // Método útil para el motor ETL: verificar si ya existen datos para no duplicar peticiones
     boolean existsBySymbol(String symbol);
 
     // Método para recuperar los datos de un activo específico ordenados por fecha

@@ -21,10 +21,24 @@ public class DataLoaderRunner implements CommandLineRunner {
 
         // Mezcla de ETFs globales y posibles tickers locales (ajusta los tickers de la BVC según tu API)
         List<String> targetSymbols = Arrays.asList(
+
+                "GC=F", //Gold
+                "AAPL", //Apple
+                "^N225", //Nikkei
+                "^DJI", //Dow Jones
+                "^NYA", //NYSE Composite Index
+                "^GSPC", //S&P 500
                 "IBM", // Acción IBM
-                "NTDOY" //Nintendo
-
-
+                "NTDOY",//Nintendo
+                "META", //Meta
+                "NVDA", //NVIDIA
+                "TSLA", //TESLA
+                "NU", //NU
+                "AMZN", //Amazon
+                "MSFT", //Microsoft
+                "BTC-USD", // Bitcoin
+                "MU", //Micron
+                "EC" //Ecopetrol
         );
 
         etlService.syncMarketData(targetSymbols);
