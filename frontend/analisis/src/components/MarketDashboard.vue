@@ -101,7 +101,7 @@ const candleOptions = ref({
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/assets/symbols')
+    const response = await axios.get('https://projectoavanzada-production.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
 
     if (availableSymbols.value.length > 0) {
@@ -142,8 +142,8 @@ const fetchCandleData = async () => {
   try {
     // Traemos los datos históricos crudos y la SMA precalculada en Java
     const [rawRes, smaRes] = await Promise.all([
-      axios.get(`http://localhost:8080/api/assets/${selectedSymbol.value}`),
-      axios.get(`http://localhost:8080/api/analysis/sma/${selectedSymbol.value}?window=${smaWindow.value}`)
+      axios.get(`https://projectoavanzada-production.up.railway.app/api/assets/${selectedSymbol.value}`),
+      axios.get(`https://projectoavanzada-production.up.railway.app/api/analysis/sma/${selectedSymbol.value}?window=${smaWindow.value}`)
     ])
 
     const rawData = rawRes.data

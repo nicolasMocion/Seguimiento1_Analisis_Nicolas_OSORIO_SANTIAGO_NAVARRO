@@ -76,7 +76,7 @@ const stringToColor = (str) => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/assets/symbols')
+    const response = await axios.get('https://projectoavanzada-production.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
     if (availableSymbols.value.length > 0) {
       selectedSymbols.value.push(availableSymbols.value[0])
@@ -93,7 +93,7 @@ const updateChart = async () => {
   }
   loadingData.value = true
   try {
-    const requests = selectedSymbols.value.map(sym => axios.get(`http://localhost:8080/api/assets/${sym}`))
+    const requests = selectedSymbols.value.map(sym => axios.get(`https://projectoavanzada-production.up.railway.app/api/assets/${sym}`))
     const responses = await Promise.all(requests)
 
     const newLabels = responses[0].data.map(asset => asset.date)

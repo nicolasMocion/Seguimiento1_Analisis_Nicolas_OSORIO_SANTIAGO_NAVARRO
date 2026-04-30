@@ -89,7 +89,7 @@ const symbolNames = reactive(new Map([
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/assets/symbols')
+    const response = await axios.get('https://projectoavanzada-production.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
 
     if (availableSymbols.value.length > 0) {
@@ -114,7 +114,7 @@ const fetchPatterns = async () => {
   if (!selectedSymbol.value) return
   loadingPattern.value = true
   try {
-    const res = await axios.get(`http://localhost:8080/api/analysis/patterns/${selectedSymbol.value}?days=${windowSize.value}`)
+    const res = await axios.get(`https://projectoavanzada-production.up.railway.app/api/analysis/patterns/${selectedSymbol.value}?days=${windowSize.value}`)
     patternData.value = res.data
   } catch (err) { console.error("Error en patrones:", err) }
   finally { loadingPattern.value = false }

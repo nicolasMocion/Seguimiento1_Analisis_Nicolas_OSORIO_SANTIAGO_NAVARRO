@@ -115,7 +115,7 @@ const symbolNames = reactive(new Map([
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/assets/symbols')
+    const response = await axios.get('https://projectoavanzada-production.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
     if (availableSymbols.value.length >= 2) {
       symbolA.value = availableSymbols.value[0]
@@ -129,9 +129,9 @@ const runComparison = async () => {
   try {
     // Hacemos 3 peticiones en paralelo: Las métricas, los datos históricos de A, y los de B
     const [simRes, dataARes, dataBRes] = await Promise.all([
-      axios.get(`http://localhost:8080/api/similarity/compare?symbolA=${symbolA.value}&symbolB=${symbolB.value}`),
-      axios.get(`http://localhost:8080/api/assets/${symbolA.value}`),
-      axios.get(`http://localhost:8080/api/assets/${symbolB.value}`)
+      axios.get(`https://projectoavanzada-production.up.railway.app/api/similarity/compare?symbolA=${symbolA.value}&symbolB=${symbolB.value}`),
+      axios.get(`https://projectoavanzada-production.up.railway.app/api/assets/${symbolA.value}`),
+      axios.get(`https://projectoavanzada-production.up.railway.app/api/assets/${symbolB.value}`)
     ])
 
     results.value = simRes.data
