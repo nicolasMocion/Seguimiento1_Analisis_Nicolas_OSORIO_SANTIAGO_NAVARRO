@@ -115,7 +115,7 @@ const symbolNames = reactive(new Map([
 
 onMounted(async () => {
   try {
-    const response = await axios.get('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
+    const response = await axios.get('https://seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
     if (availableSymbols.value.length >= 2) {
       symbolA.value = availableSymbols.value[0]
@@ -133,9 +133,9 @@ const runComparison = async () => {
 
 
     const [simRes, dataARes, dataBRes] = await Promise.all([
-      axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/similarity/compare?symbolA=${cleanSymA}&symbolB=${cleanSymB}`),
-      axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${cleanSymA}`),
-      axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${cleanSymB}`)
+      axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/similarity/compare?symbolA=${cleanSymA}&symbolB=${cleanSymB}`),
+      axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${cleanSymA}`),
+      axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${cleanSymB}`)
     ])
 
     results.value = simRes.data

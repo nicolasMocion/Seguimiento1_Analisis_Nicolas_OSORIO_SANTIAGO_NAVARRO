@@ -93,7 +93,7 @@ const chartOptions = ref({
 
 onMounted(async () => {
   try {
-    const response = await axios.get('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
+    const response = await axios.get('https://seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
     if (availableSymbols.value.length > 0) {
       selectedSymbol.value = availableSymbols.value[0]
@@ -106,7 +106,7 @@ onMounted(async () => {
 const runBenchmark = async () => {
   loading.value = true
   try {
-    const response = await axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${selectedSymbol.value}/benchmark`)
+    const response = await axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${selectedSymbol.value}/benchmark`)
     const sortedData = response.data.sort((a, b) => a.timeInMilliseconds - b.timeInMilliseconds)
     results.value = sortedData
 
