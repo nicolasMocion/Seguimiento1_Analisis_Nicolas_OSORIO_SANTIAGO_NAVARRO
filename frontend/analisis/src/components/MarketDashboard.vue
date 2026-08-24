@@ -101,7 +101,7 @@ const candleOptions = ref({
 
 onMounted(async () => {
   try {
-    const response = await axios.get('https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/assets/symbols')
+    const response = await axios.get('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
 
     if (availableSymbols.value.length > 0) {
@@ -117,7 +117,7 @@ onMounted(async () => {
 const fetchMatrix = async (symbolsArray) => {
   loadingMatrix.value = true
   try {
-    const res = await axios.post('https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/similarity/matrix', symbolsArray)
+    const res = await axios.post('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/similarity/matrix', symbolsArray)
     const matrixData = res.data
 
     const series = []
@@ -142,8 +142,8 @@ const fetchCandleData = async () => {
   try {
     // Traemos los datos históricos crudos y la SMA precalculada en Java
     const [rawRes, smaRes] = await Promise.all([
-      axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/assets/${selectedSymbol.value}`),
-      axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/analysis/sma/${selectedSymbol.value}?window=${smaWindow.value}`)
+      axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${selectedSymbol.value}`),
+      axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/analysis/sma/${selectedSymbol.value}?window=${smaWindow.value}`)
     ])
 
     const rawData = rawRes.data

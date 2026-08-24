@@ -63,7 +63,7 @@ const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num)
 
 onMounted(async () => {
   try {
-    const response = await axios.get('https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/assets/symbols')
+    const response = await axios.get('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
     if (availableSymbols.value.length > 0) {
       selectedSymbol.value = availableSymbols.value[0]
@@ -76,7 +76,7 @@ const fetchTopVolume = async () => {
   if (!selectedSymbol.value) return
   loading.value = true
   try {
-    const response = await axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/assets/${selectedSymbol.value}/top-volume`)
+    const response = await axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/${selectedSymbol.value}/top-volume`)
     topAssets.value = response.data
   } catch (error) { console.error("Error al obtener el Top 15:", error) }
   finally { loading.value = false }

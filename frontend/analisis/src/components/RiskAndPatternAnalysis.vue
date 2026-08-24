@@ -89,7 +89,7 @@ const symbolNames = reactive(new Map([
 
 onMounted(async () => {
   try {
-    const response = await axios.get('https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/assets/symbols')
+    const response = await axios.get('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/assets/symbols')
     availableSymbols.value = response.data
 
     if (availableSymbols.value.length > 0) {
@@ -104,7 +104,7 @@ onMounted(async () => {
 const fetchRiskProfile = async (symbolsArray) => {
   loadingRisk.value = true
   try {
-    const res = await axios.post('https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/analysis/risk-profile', symbolsArray)
+    const res = await axios.post('seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/analysis/risk-profile', symbolsArray)
     riskData.value = res.data
   } catch (err) { console.error("Error en riesgo:", err) }
   finally { loadingRisk.value = false }
@@ -114,7 +114,7 @@ const fetchPatterns = async () => {
   if (!selectedSymbol.value) return
   loadingPattern.value = true
   try {
-    const res = await axios.get(`https://seguimiento1analisisnicolasosoriosantiagona-production.up.railway.app/api/analysis/patterns/${selectedSymbol.value}?days=${windowSize.value}`)
+    const res = await axios.get(`seguimiento1analisisnicolasosoriosantiagona-production-d160.up.railway.app/api/analysis/patterns/${selectedSymbol.value}?days=${windowSize.value}`)
     patternData.value = res.data
   } catch (err) { console.error("Error en patrones:", err) }
   finally { loadingPattern.value = false }
